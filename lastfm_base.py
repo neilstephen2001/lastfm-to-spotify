@@ -58,7 +58,7 @@ class LastFM_Data:
                 print("%d.\t%s" % (i + 1, self.data[i]))
         elif self.type == 'album' or self.type == 'track':
             for i in range(len(self.data)):
-                print("%d.\t%s - %s" % (i + 1, self.data[i]['artist'], self.data[i]['item']))
+                print("%d.\t%s - %s" % (i + 1, self.data[i]['artist'], self.data[i]['name']))
 
     def get_params(self):
         params = {'limit': self.limit, 'api_key': self.api_key, 'format': 'json'}
@@ -95,7 +95,7 @@ class LastFM_Data:
         elif self.type == 'album' or self.type == 'track':
             for item in data[attr][self.type]:
                 temp = dict()
-                temp['item'] = item['name']
+                temp['name'] = item['name']
                 temp['artist'] = item['artist']['name']
                 info.append(temp)
 
@@ -119,7 +119,3 @@ class LastFM_Data:
     def exceptions(self, response):
         print("Exception occurred with status code: ", response.status_code)
         print("Error: ", response.text)
-
-
-if __name__ == '__main__':
-    data = LastFM_Data()
