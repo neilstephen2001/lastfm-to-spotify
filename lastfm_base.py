@@ -127,48 +127,24 @@ class Spotify:
         self.username = get_api.spotify_user()
 
         self.headers = {"Content-Type": "application/json",
-                        "Authorization": f"Bearer {self.token}"}
-
+                                "Authorization": f"Bearer {self.token}"}
+        
         self.uri_list = []
         self.playlist_info = None
         self.playlist_id = None
 
 
-    def remove_punctuation(self, data):
-        punctuation = """'"*"""
-        for i in data:
-            if i in punctuation:
-                data = data.replace(i, "")
-        return data
-    
-
     def get_spotify_uri(self, song_info):
         uri_list = []
         for item in song_info:
-
-            song = self.remove_punctuation(item['name'])
-            artist = self.remove_punctuation(item['artist'])
-
-            url = f"https://api.spotify.com/v1/search?query=track%3A{song}+artist%3A{artist}&type=track&offset=0&limit=5"
+            url = f"https://api.spotify.com/v1/search?query=track%3A{item['name']}+artist%3A{item['artist']}&type=track&offset=0&limit=5"
             response = requests.get(url, headers=self.headers)
-
-            if response.status_code != 200:
-                self.exceptions(response)
+            res= response.json()
+            
+            uri = res['tracks']['items']
+            if not uri:
                 break
-            else:
-                res = response.json()
-                uri = res['tracks']['items']
-                
-                if not uri:
-                    break
-                
-                for i in range(5):
-                    if len(item['name']) == len(uri[i]['name']):
-                        uri_list.append(uri[i]['uri'])
-                        break
-                    elif i == 4:
-                        uri_list.append(uri[0]['uri'])
-                        break
+            uri_list.append(uri[0]['uri'])
 
         self.uri_list = uri_list
 
@@ -181,19 +157,21 @@ class Spotify:
         else:
             res = response.json()
             self.playlist_id = res['id']
-
+    
 
     def add_songs_to_playlist(self):
+
         url = f"https://api.spotify.com/v1/playlists/{self.playlist_id}/tracks"
         uri = json.dumps({'uris': self.uri_list})
-
+        
         response = requests.post(url, data=uri, headers=self.headers)
         if response.status_code != 201:
+            print("hi")
             self.exceptions(response)
         else:
             print("Playlist successfully created")
 
-
+    
     def exceptions(self, response):
         print("Exception occurred with status code: ", response.status_code)
         print("Error: ", response.text)

@@ -1,4 +1,4 @@
-import json, base_file,  get_api
+import json, base_file
 
 """
 app = Flask(__name__)
@@ -9,25 +9,18 @@ def hello_world():
     return redirect('/create')
 """
 
-obj1 = lastfm_base.LastFM_Data()
-obj1.limit = 25
-toptracks = obj1.lastfm_get_data()
+lfm = base_file.LastFM_Data()
+toptracks = lfm.lastfm_get_data()
 
-toptrack = []
-temp = dict()
-temp['name'] = 'Forever Only'
-temp['artist'] = 'Jaehyun'
-toptrack.append(temp)
-
-obj2 = spotify_base.Spotify()
-obj2.get_spotify_uri(toptrack)
-
+spt = base_file.Spotify()
+spt.get_spotify_uri(toptracks)
 
 playlist_info = json.dumps({
-    'name': 'Top tracks on last.fm',
+    'name': 'Top last.fm tracks',
     'description': 'not me doing this so that i could be employed',
     'public': False
 })
 
-obj2.create_playlist(playlist_info)
-obj2.add_songs_to_playlist()
+spt.create_playlist(playlist_info)
+spt.add_songs_to_playlist()
+
