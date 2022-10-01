@@ -9,10 +9,10 @@ class LastFM_Data:
         self.data = None
 
         # default parameters, can be replaced with user input
-        self.charts = 'user'
-        self.type = 'track'
-        self.limit = 25
-        self.username = 'stvn127'
+        self.charts = None
+        self.type = None
+        self.limit = 0
+        self.username = None
 
         # parameters needed to get last.fm data
         self.url = 'https://ws.audioscrobbler.com/2.0/'
@@ -99,7 +99,6 @@ class LastFM_Data:
                 temp['artist'] = item['artist']['name']
                 info.append(temp)
 
-        self.data = info
         return info
 
     def lastfm_get_data(self):
@@ -114,7 +113,7 @@ class LastFM_Data:
             res = response.json()
             data = self.organise_data(res, attr)
 
-        return data
+        self.data = data
 
     def exceptions(self, response):
         print("Exception occurred with status code: ", response.status_code)

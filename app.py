@@ -10,17 +10,29 @@ def hello_world():
 """
 
 lfm = base_file.LastFM_Data()
-toptracks = lfm.lastfm_get_data()
 
-spt = base_file.Spotify()
-spt.get_spotify_uri(toptracks)
+lfm.charts = 'user'        # 'chart' or 'user'
+lfm.username = 'stvn127'    # my username
+lfm.limit = 25              # number of items to extract
 
-playlist_info = json.dumps({
-    'name': 'Top last.fm tracks',
-    'description': 'not me doing this so that i could be employed',
-    'public': False
-})
+lfm.type = 'album'          # 'artist', 'album' or 'track' 
+                            # only use 'album' option if lfm.charts = 'user'
+                            # conversion to spotify playlist only works for 'track'
 
-spt.create_playlist(playlist_info)
-spt.add_songs_to_playlist()
+lfm.lastfm_get_data()       # get data
+lfm.print_data()
+
+# get song URIs and generate playlist
+if lfm.type == 'track':
+    spt = base_file.Spotify()
+    spt.get_spotify_uri(lfm.data)
+
+    playlist_info = json.dumps({
+        'name': 'Top last.fm tracks',
+        'description': 'not me doing this so that i could be employed',
+        'public': False
+    })
+
+    spt.create_playlist(playlist_info)
+    spt.add_songs_to_playlist()
 
