@@ -1,4 +1,4 @@
-import json, lastfm_base, spotify_base, get_api
+import json, base_file,  get_api
 
 """
 app = Flask(__name__)
