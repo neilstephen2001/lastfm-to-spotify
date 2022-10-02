@@ -1,5 +1,5 @@
 import requests
-import json, get_api
+import json
 
 
 class LastFM_Data:
@@ -105,7 +105,8 @@ class LastFM_Data:
 
         # get parameters for last.fm data extraction
         [params, attr] = self.get_params()
-
+        data = None
+        
         response = requests.get(self.url, headers=self.headers, params=params)
         if response.status_code != 200:
             self.exceptions(response)

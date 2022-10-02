@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+        <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&display=swap" rel="stylesheet">
+        <meta charset="UTF-8">
+        <title>last.fm to Spotify playlist generator</title>
+    </head>
+
+    <body>
+        <div>
+            <h2>Get data from last.fm</h2>
+            <label for="charts">Obtain data from:</label><br>
+            <select name="charts" id="charts">
+                <option value="chart">Last.fm Popularity charts</option>
+                <option value="user">Specific user</option>
+            </select><br><br>
+            <label for="username">last.fm username:</label><br><br>
+            <label for="type">Type of data:</label><br>
+            <select name="charts" id="charts">
+                <option value="artist">Artists</option>
+                <option value="album">Albums</option>
+                <option value="track">Tracks</option>
+            </select><br><br>
+            <label for="limit">Number of items:</label><br>
+        </div>
+    </body>
+</html>

@@ -1,7 +1,8 @@
-import json, base_file
+import base_file
+import json
 import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
-from flask import Flask
+from spotipy.oauth2 import SpotifyOAuth
+from flask import Flask, request, url_for, session, redirect, render_template
 from config import Config
 
 
@@ -9,6 +10,42 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 
+@app.route('/')
+def test():
+    auth = SpotifyOAuth(
+            client_id = app.config['SPOTIFY_CLIENT_ID'],
+            client_secret = app.config['SPOTIFY_CLIENT_SECRET'],
+            redirect_uri = app.config['SPOTIFY_REDIRECT_URI'],
+            scope = 'user-read-recently-played'
+    )
+
+    sp = spotipy.Spotify(auth_manager = auth)
+
+    results = sp.current_user_recently_played()
+    for idx, item in enumerate(results['items']):
+        track = item['track']
+        print(idx+1, track['artists'][0]['name'], " – ", track['name'])
+    
+    return render_template('home.html')
+
+@app.route('/home')
+def home():
+    lfm = base_file.LastFM_Data()
+    lfm.api_key = app.config['LASTFM_API']
+
+    lfm.charts = request.form['charts']
+    lfm.username = request.form['last.fm username']
+    lfm.type = request.form['type']
+    lfm.limit = request.form['limit']
+
+    return render_template('display_data.html')
+
+if __name__ == "__main__":
+    app.run()
+
+
+
+"""
 lfm = base_file.LastFM_Data()
 lfm.api_key = app.config['LASTFM_API']
 
@@ -16,7 +53,7 @@ lfm.charts = 'user'        # 'chart' or 'user'
 lfm.username = 'stvn127'    # my username
 lfm.limit = 25              # number of items to extract
 
-lfm.type = 'track'          # 'artist', 'album' or 'track' 
+lfm.type = 'album'          # 'artist', 'album' or 'track' 
                             # only use 'album' option if lfm.charts = 'user'
                             # conversion to spotify playlist only works for 'track'
 
@@ -39,4 +76,4 @@ if lfm.type == 'track':
 
     spt.create_playlist(playlist_info)
     spt.add_songs_to_playlist()
-
+"""
