@@ -21,6 +21,7 @@ def login():
             scope = 'playlist-modify-public'
     )
 
+    auth_url = auth.get_authorize_url()
     return redirect('/home')
 
 
@@ -37,8 +38,7 @@ def home():
         lfm.type = request.form['type'].strip()
         lfm.limit = request.form['limit'].strip()
         
-        return render_template('display_data.html')
-    
+        return render_template('display_data.html', lfm.lastfm_get_data())
     else:
         return render_template('home.html')
 
@@ -51,7 +51,7 @@ def results():
 # Interface for creating playlist, should return 'playlist successfully created'
 """
 @app.route('/create')
-def results():
+def create():
 """
 
 
