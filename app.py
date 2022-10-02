@@ -1,4 +1,7 @@
 import json, base_file
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
+from flask import Flask
 
 """
 app = Flask(__name__)
@@ -15,7 +18,7 @@ lfm.charts = 'user'        # 'chart' or 'user'
 lfm.username = 'stvn127'    # my username
 lfm.limit = 25              # number of items to extract
 
-lfm.type = 'album'          # 'artist', 'album' or 'track' 
+lfm.type = 'track'          # 'artist', 'album' or 'track' 
                             # only use 'album' option if lfm.charts = 'user'
                             # conversion to spotify playlist only works for 'track'
 
