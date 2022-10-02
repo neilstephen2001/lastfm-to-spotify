@@ -14,7 +14,9 @@ class Config:
 
     """Spotify and last.fm APIs"""
     LASTFM_API = environ.get('LASTFM_API')
-    CLIENT_ID = environ.get('CLIENT_ID')
-    CLIENT_SECRET = environ.get('CLIENT_SECRET')
-    USER_ID = environ.get('USER_ID')
+    SPOTIFY_CLIENT_ID = environ.get('SPOTIFY_CLIENT_ID')
+    SPOTIFY_CLIENT_SECRET = environ.get('SPOTIFY_CLIENT_SECRET')
+    SPOTIFY_USER_ID = environ.get('SPOTIFY_USER_ID')
+    SPOTIFY_REDIRECT_URI = environ.get('SPOTIFY_REDIRECT_URI')
+    SPOTIFY_TOKEN = environ.get('SPOTIFY_TOKEN')
 

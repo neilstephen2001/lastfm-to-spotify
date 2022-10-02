@@ -5,7 +5,7 @@ import json, get_api
 class LastFM_Data:
     def __init__(self):
         self.user_agent = 'stvn127'
-        self.api_key = get_api.lastfm_api()
+        self.api_key = None
         self.data = None
 
         # default parameters, can be replaced with user input
@@ -122,8 +122,8 @@ class LastFM_Data:
 
 class Spotify:
     def __init__(self):
-        self.token = get_api.spotify_token()
-        self.username = get_api.spotify_user()
+        self.token = None
+        self.username = None
 
         self.headers = {"Content-Type": "application/json",
                         "Authorization": f"Bearer {self.token}"}
@@ -143,6 +143,7 @@ class Spotify:
 
     def get_spotify_uri(self, song_info):
         uri_list = []
+        
         for item in song_info:
 
             song = self.remove_punctuation(item['name'])

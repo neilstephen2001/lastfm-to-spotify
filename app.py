@@ -2,17 +2,15 @@ import json, base_file
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from flask import Flask
+from config import Config
 
-"""
+
 app = Flask(__name__)
-app.secret_key = "BBS my diamonds, I don't need no light to shine"
+app.config.from_object(Config)
 
-
-def hello_world():
-    return redirect('/create')
-"""
 
 lfm = base_file.LastFM_Data()
+lfm.api_key = app.config['LASTFM_API']
 
 lfm.charts = 'user'        # 'chart' or 'user'
 lfm.username = 'stvn127'    # my username
@@ -28,6 +26,9 @@ lfm.print_data()
 # get song URIs and generate playlist
 if lfm.type == 'track':
     spt = base_file.Spotify()
+    spt.token = app.config['SPOTIFY_TOKEN']
+    spt.username = app.config['SPOTIFY_USER_ID']
+
     spt.get_spotify_uri(lfm.data)
 
     playlist_info = json.dumps({
