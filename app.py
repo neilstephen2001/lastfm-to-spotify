@@ -1,6 +1,7 @@
 import base_file
 import json
 import spotipy
+import spotipy.util as util
 from spotipy.oauth2 import SpotifyOAuth
 from flask import Flask, request, url_for, session, redirect, render_template
 from config import Config
@@ -10,38 +11,49 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 
+# Authorising Spotify
 @app.route('/')
-def test():
+def login():
     auth = SpotifyOAuth(
             client_id = app.config['SPOTIFY_CLIENT_ID'],
             client_secret = app.config['SPOTIFY_CLIENT_SECRET'],
             redirect_uri = app.config['SPOTIFY_REDIRECT_URI'],
-            scope = 'user-read-recently-played'
+            scope = 'playlist-modify-public'
     )
 
-    sp = spotipy.Spotify(auth_manager = auth)
+    return redirect('/home')
 
-    results = sp.current_user_recently_played()
-    for idx, item in enumerate(results['items']):
-        track = item['track']
-        print(idx+1, track['artists'][0]['name'], " – ", track['name'])
-    
-    return render_template('home.html')
 
-@app.route('/home')
+# Should get data once parameters are entered, then redirect to the display data page
+@app.route('/home', methods=['GET', 'POST'])
 def home():
-    lfm = base_file.LastFM_Data()
-    lfm.api_key = app.config['LASTFM_API']
 
-    lfm.charts = request.form['charts']
-    lfm.username = request.form['last.fm username']
-    lfm.type = request.form['type']
-    lfm.limit = request.form['limit']
+    if request.method == 'POST':
+        lfm = base_file.LastFM_Data()
+        lfm.api_key = app.config['LASTFM_API']
 
-    return render_template('display_data.html')
+        lfm.charts = request.form['charts'].strip()
+        lfm.username = request.form['last.fm username'].strip()
+        lfm.type = request.form['type'].strip()
+        lfm.limit = request.form['limit'].strip()
+        
+        return render_template('display_data.html')
+    
+    else:
+        return render_template('home.html')
 
-if __name__ == "__main__":
-    app.run()
+# Displays last.fm data, should show an option to create playlist
+"""
+@app.route('/results')
+def results():
+"""
+
+# Interface for creating playlist, should return 'playlist successfully created'
+"""
+@app.route('/create')
+def results():
+"""
+
 
 
 
