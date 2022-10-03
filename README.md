@@ -15,6 +15,7 @@ This web app extracts music data (i.e. top songs) from last.fm, which can then b
 ### To run:
 In the terminal, set up the Flask app then run the app using:
 > set FLASK_APP = app
+> 
 > flask run
 
 ### How it should theoretically work:
